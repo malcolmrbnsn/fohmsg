@@ -1,0 +1,34 @@
+.env
+.env-development
+.env-production
+
+# Logs
+logs
+*.log
+pm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Output of 'npm pack'
+*.tgz
+
+# Random
+trash
+.DS_Store
+.sass-cache
+.tmp
+.rvmrc
+.trashes
+*~
+
+
+# Editor
+.vscode
+.vscode-test
