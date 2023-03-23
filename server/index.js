@@ -1,49 +1,40 @@
-const WebSocket = require('ws');
+import {WebSocketServer} from 'ws'
 
-// setup the server socket
-const server = new WebSocket.Server({ port: 8081 }, () => console.log("server running"));
+const server = new WebSocketServer({port: 8080}, () => console.log('Server started'))
 
-// collection of current connections
-const connections = new Set();
+const users = new Set();
 
-// blast a message to all connections
 function sendMessage(message) {
-    connections.forEach((connection) => {
-        connection.ws.send(JSON.stringify(message));
+    users.forEach((user) => {
+        user.ws.send(JSON.stringify(message))
     })
 }
 
-
-server.on("connection", (ws) => {
-    const connRef = {
-        ws,
-    };
-    connections.add(connRef);
-
+server.on('connection', (ws) => {
+    const userRef = {ws}
+    users.add(userRef)
     ws.on('message', (message) => {
-
-        console.log("new message: " + message);
-
+        console.log(message);
         try {
             const data = JSON.parse(message);
-            
-            const messageToSend = {
-                sender: data.body.sender,
-                body: data.body,
-                date: Date.now()
+            if(typeof data.sender !== 'string' || typeof data.body !== 'string'){
+                console.error('Invalid message');
+                return
             }
 
-            sendMessage(messageToSend);
+            const messageToSend = {
+                sender: data.sender,
+                body: data.body,
+                sentAt: Date.now()
+            }
 
-        } catch (e) {
-            console.error('Error passing message!', e)
+            sendMessage(messageToSend)
+        } catch(e) {
+            console.error('Error parsing message', e)
         }
-
-    })
-
-    ws.on("close", (code, reason) => {
-        connections.delete(connRef);
+    });
+    ws.on('close', (code, reason) => {
+        users.delete(userRef);
         console.log(`Connection closed: ${code} ${reason}!`);
     })
-
-})
+});
