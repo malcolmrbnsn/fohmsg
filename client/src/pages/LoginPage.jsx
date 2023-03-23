@@ -15,7 +15,7 @@ const LoginPage = () => {
 
   return (
       <Layout>
-        <form className='w-full max-w-sm flex flex-col space-y-6'>
+        <form onSubmit={handleSubmit} className='w-full max-w-sm flex flex-col space-y-6'>
             <div className='flex flex-col items-center mb-6 space-y-6'>
                 <label
                     className='block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4'
@@ -38,8 +38,7 @@ const LoginPage = () => {
                 <div className='md:w-2/3'></div>
                 <button
                     className='self-center shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded'
-                    type='button'
-                    onClick={handleSubmit}
+                    type='submit'
                 >
                     Login
                 </button>
