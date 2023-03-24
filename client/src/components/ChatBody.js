@@ -14,7 +14,7 @@ const ChatBody = ({ messages }) => {
     return (
         <>
         <header>
-          <p>Chat !!!!</p>
+          <h2>Chat Log</h2>
           <button onClick={handleChatLeave}>
             Leave
           </button>

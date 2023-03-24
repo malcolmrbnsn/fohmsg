@@ -14,16 +14,27 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
+let users = [];
+let messages = [];
 
 socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
 
-    socket.on('message', (data) => {
-      socketIO.emit('messageResponse', data)
+    socket.on('newUser', data => {
+      users.push(data);
+      socketIO.emit('newUserResponse', users);
+    })
+
+    socket.on('message', data => {
+      messages.push(data)
+      socketIO.emit('messageResponse', messages)
     });
 
     socket.on('disconnect', () => {
       console.log('🔥: A user disconnected');
+      users = users.filter((user) => user.socketID !== socket.id);
+      console.log(users);
+      socketIO.emit('newUserResponse', users);
     });
 });
 
