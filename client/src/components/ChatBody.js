@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const ChatBody = ({ messages }) => {
+const ChatBody = ({ messages, lastMessageRef, typingStatus }) => {
     const navigate = useNavigate();
 
     const handleChatLeave = () => {
@@ -25,16 +25,17 @@ const ChatBody = ({ messages }) => {
           {messages.map((message) => {
             return (
             <div>
-              <b>{message.name}</b>
+              <b>{message.username}</b>
               <p>{message.text}</p>
             </div>
             )
           })}
-    
+          <div ref={lastMessageRef}/>
             {/*This is triggered when a user is typing*/}
     
             <div>
-              <i>Someone is typing...</i>
+              <i>{typingStatus}
+              </i>
             </div>
 
         </div>

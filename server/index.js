@@ -18,33 +18,33 @@ let users = [];
 let messages = [];
 
 socketIO.on('connection', (socket) => {
-    console.log(`⚡: ${socket.id} user just connected!`);
+    console.log(`CONN: ${socket.id} connected`);
 
     socket.on('newUser', data => {
       users.push(data);
+      console.log(`CONN: ${socket.id} logged in as ${data.username}`);
       socketIO.emit('newUserResponse', users);
     })
 
+    socket.on('typing', data => {
+      console.log(`CONN: ${data}`);
+      socket.broadcast.emit('typingResponse', data);
+    });
+
     socket.on('message', data => {
-      messages.push(data)
+      messages.push(data);
+      console.log(`CONN: message ${data.text} from ${data.username}`)
       socketIO.emit('messageResponse', messages)
     });
 
     socket.on('disconnect', () => {
-      console.log('🔥: A user disconnected');
+      console.log(`CONN: ${socket.id} disconnected`);
       users = users.filter((user) => user.socketID !== socket.id);
-      console.log(users);
       socketIO.emit('newUserResponse', users);
     });
 });
 
-app.get('/api', (req, res) => {
-  res.json({
-    message: 'Hello world',
-  });
-});
-
 
 http.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+  console.log(`HTTP: Listening on ${PORT}`);
 });
