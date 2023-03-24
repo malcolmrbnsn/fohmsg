@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const ChatBody = ({socket}) => {
+const ChatBody = ({ messages }) => {
     const navigate = useNavigate();
 
     const handleChatLeave = () => {
@@ -20,29 +20,23 @@ const ChatBody = ({socket}) => {
           </button>
         </header>
   
-  
-        {/*This shows messages sent from you*/}
         <div>
-          <div>
-            <b>You</b>
-            <p>Hello</p>
-          </div>
-  
-  
-          {/*This shows messages received by you*/}
-  
-          <div>
-            <b>Other</b>
-            <p>Hey, I?</p>
-          </div>
-  
-  
-          {/*This is triggered when a user is typing*/}
-  
-          <div>
-            <i>Someone is typing...</i>
-          </div>
-  
+
+          {messages.map((message) => {
+            return (
+            <div>
+              <b>{message.name}</b>
+              <p>{message.text}</p>
+            </div>
+            )
+          })}
+    
+            {/*This is triggered when a user is typing*/}
+    
+            <div>
+              <i>Someone is typing...</i>
+            </div>
+
         </div>
       </>
     )
