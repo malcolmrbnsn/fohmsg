@@ -1,27 +1,19 @@
-# React Chat Websocket application
+# FOHMSG
 
 After cloning the repository, you need to start the websocket server first.
 
 ```shell
 cd server
-yarn install && node .
+npm install && npm start
 ```
 
 After that, you can start the client application.
 
 ```shell
-yarn install && yarn start
+cd client
+npm install && npm start
 ```
 
-The React application will be running on <http://localhost:3000/>.
-
-## Using Docker
-
-```shell
-docker-compose up -d --build
-```
-
-The React application will be running on <http://localhost:3000/>.
-
+The application will be running on <http://localhost:3000/>.
 
 based on https://github.com/koladev32/react-websocket-docker-chat-room

@@ -24,6 +24,7 @@ socketIO.on('connection', (socket) => {
       users.push(data);
       console.log(`CONN: ${socket.id} logged in as ${data.username}`);
       socketIO.emit('newUserResponse', users);
+      socket.emit('messageResponse', messages);
     })
 
     socket.on('typing', data => {
@@ -34,7 +35,7 @@ socketIO.on('connection', (socket) => {
     socket.on('message', data => {
       messages.push(data);
       console.log(`CONN: message ${data.text} from ${data.username}`)
-      socketIO.emit('messageResponse', messages)
+      socketIO.emit('messageResponse', messages);
     });
 
     socket.on('disconnect', () => {
