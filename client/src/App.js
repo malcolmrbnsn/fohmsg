@@ -1,17 +1,22 @@
-import React from "react";
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import LoginPage from "./pages/LoginPage";
-import ChatPage from "./pages/ChatPage";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './components/Home';
+import socketIO from 'socket.io-client';
+import ChatPage from './components/ChatPage';
+
+const socket = socketIO.connect("http://localhost:3001");
+
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/chat/:username" element={<ChatPage />} />
-      </Routes>
+      <div>
+        <Routes>
+          <Route path="/" element={ <Home socket={socket}/> } />
+          <Route path="/chat" element={ <ChatPage socket={socket}/> } />
+        </Routes>
+      </div>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;

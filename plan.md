@@ -11,7 +11,8 @@ error codes:
 stage 1
 - basic websocket setup
 - implement reconnection resync, showlog
-- simple ui, one chatroom
+- simple ui, one chatroom with keypress sync
+- basic clear screen func
 - usernames :)
 
 
@@ -38,8 +39,8 @@ message types
 - chat
 - log
 - connection
-    - same sorta buttons as radio a2a2 etc
-    - can be set by admin, overrides client
+    - same sorta buttons as radio a1a2 etc
+    - can be set by admin, overrides client (adv)
     
 
 message data

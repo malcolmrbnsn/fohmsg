@@ -1,40 +1,50 @@
-import {WebSocketServer} from 'ws'
+const express = require('express');
 
-const server = new WebSocketServer({port: 8080}, () => console.log('Server started'))
+const app = express();
+const http = require('http').Server(app);
 
-const users = new Set();
+const PORT = 3001;
 
-function sendMessage(message) {
-    users.forEach((user) => {
-        user.ws.send(JSON.stringify(message))
+const cors = require('cors');
+app.use(cors());
+
+const socketIO = require('socket.io')(http, {
+    cors: {
+        origin: "http://localhost:3000"
+    }
+});
+
+let users = [];
+let messages = [];
+
+socketIO.on('connection', (socket) => {
+    console.log(`CONN: ${socket.id} connected`);
+
+    socket.on('newUser', data => {
+      users.push(data);
+      console.log(`CONN: ${socket.id} logged in as ${data.username}`);
+      socketIO.emit('newUserResponse', users);
     })
-}
 
-server.on('connection', (ws) => {
-    const userRef = {ws}
-    users.add(userRef)
-    ws.on('message', (message) => {
-        console.log(message);
-        try {
-            const data = JSON.parse(message);
-            if(typeof data.sender !== 'string' || typeof data.body !== 'string'){
-                console.error('Invalid message');
-                return
-            }
-
-            const messageToSend = {
-                sender: data.sender,
-                body: data.body,
-                sentAt: Date.now()
-            }
-
-            sendMessage(messageToSend)
-        } catch(e) {
-            console.error('Error parsing message', e)
-        }
+    socket.on('typing', data => {
+      console.log(`CONN: ${data}`);
+      socket.broadcast.emit('typingResponse', data);
     });
-    ws.on('close', (code, reason) => {
-        users.delete(userRef);
-        console.log(`Connection closed: ${code} ${reason}!`);
-    })
+
+    socket.on('message', data => {
+      messages.push(data);
+      console.log(`CONN: message ${data.text} from ${data.username}`)
+      socketIO.emit('messageResponse', messages)
+    });
+
+    socket.on('disconnect', () => {
+      console.log(`CONN: ${socket.id} disconnected`);
+      users = users.filter((user) => user.socketID !== socket.id);
+      socketIO.emit('newUserResponse', users);
+    });
+});
+
+
+http.listen(PORT, () => {
+  console.log(`HTTP: Listening on ${PORT}`);
 });
