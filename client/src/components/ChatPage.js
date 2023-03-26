@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from "react";
 import ChatBar from "./ChatBar";
-import ChatFooter from "./ChatFooter";
+import ChatBody from "./ChatBody";
 
 const ChatPage = ({socket}) => {
-    const [message, setMessage] = useState({
-        message: '',
-        username: '',
-        socketID: '',
-        date: 0
-    });
+    const [message, setMessage] = useState({});
 
     useEffect(() => {
-        socket.on('messageResponse', data => setMessage(data));
+        socket.on('messageResponse', data => {
+            // setMessage(data);
+            console.log(data);
+        });
     }, [socket, message]);
 
 
     return (
         <div>
             <ChatBar socket={socket}/>
-            <ChatFooter socket={socket} message={message} setMessage={setMessage} />
+            <ChatBody socket={socket} message={message} setMessage={setMessage} />
         </div>
     )
 }
 
-export default ChatPage
+export default ChatPage;

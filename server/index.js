@@ -10,16 +10,16 @@ app.use(cors());
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: "http://100.97.123.8:3000"
     }
 });
 
 let users = [];
 let message = {
   message: '',
-  username: '',
+  username: 'host',
   socketID: '',
-  date: 0
+  date: Date.now()
 };
 
 socketIO.on('connection', (socket) => {
@@ -35,7 +35,7 @@ socketIO.on('connection', (socket) => {
     socket.on('message', data => {
       message = data;
       console.log(`CONN: message ${data.message} from ${data.username}`);
-      socketIO.emit('messageResponse', data);
+      socket.broadcast.emit('messageResponse', data);
     });
 
     socket.on('disconnect', () => {

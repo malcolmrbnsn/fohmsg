@@ -1,6 +1,7 @@
 import React from "react";
+import moment from 'moment';
 
-const ChatFooter = ({socket, message, setMessage}) => {
+const ChatBody = ({socket, message, setMessage}) => {
 
     const handleTyping = ((e) => {
         e.preventDefault();
@@ -18,14 +19,16 @@ const ChatFooter = ({socket, message, setMessage}) => {
 
     return (
         <div>
-            <input
+            <textarea
                 type="text"
-                placeholder=""
                 value={message.message}
+                cols="80"
+                rows="5"
                 onChange={handleTyping}
             />
+            <p>Edited {moment(message.date).fromNow()} ago by {message.username}</p>
         </div>
     )
 }
 
-export default ChatFooter
+export default ChatBody

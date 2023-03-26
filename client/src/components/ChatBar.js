@@ -24,12 +24,12 @@ const ChatBar = ({ socket }) => {
           </button>
             <div>
                 <h4>Active Users</h4>
-                <div>
-                    {users.map(user => <p key={user.socketID}>{user.username}</p>)}
-                </div>
+                <ul>
+                    {users.map(user => <li key={user.socketID}>{user.username}</li>)}
+                </ul>
             </div>
         </div>
     )
 }
 
-export default ChatBar
+export default ChatBar;

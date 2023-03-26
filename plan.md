@@ -25,6 +25,7 @@ stage 3
 - admin settings
 - tiling windows
 - groups
+- nosleep etc?
 
 stage 4
 - mobile :o
