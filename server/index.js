@@ -15,7 +15,12 @@ const socketIO = require('socket.io')(http, {
 });
 
 let users = [];
-let messages = [];
+let message = {
+  message: '',
+  username: '',
+  socketID: '',
+  date: 0
+};
 
 socketIO.on('connection', (socket) => {
     console.log(`CONN: ${socket.id} connected`);
@@ -24,18 +29,13 @@ socketIO.on('connection', (socket) => {
       users.push(data);
       console.log(`CONN: ${socket.id} logged in as ${data.username}`);
       socketIO.emit('newUserResponse', users);
-      socket.emit('messageResponse', messages);
-    })
-
-    socket.on('typing', data => {
-      console.log(`CONN: ${data}`);
-      socket.broadcast.emit('typingResponse', data);
+      socket.emit('messageResponse', message);
     });
 
     socket.on('message', data => {
-      messages.push(data);
-      console.log(`CONN: message ${data.text} from ${data.username}`)
-      socketIO.emit('messageResponse', messages);
+      message = data;
+      console.log(`CONN: message ${data.message} from ${data.username}`);
+      socketIO.emit('messageResponse', data);
     });
 
     socket.on('disconnect', () => {
