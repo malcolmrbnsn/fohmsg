@@ -8,14 +8,14 @@ const socket = socketIO.connect("http://100.97.123.8:3001");
 
 function App() {
   return (
+    <div className='container'>
     <BrowserRouter>
-      <div className="container">
         <Routes>
-          <Route path="/" element={ <Home socket={socket}/> } />
-          <Route path="/chat" element={ <ChatPage socket={socket}/> } />
+            <Route path="/" element={ <Home socket={socket}/> } />
+            <Route path="/chat" element={ <ChatPage socket={socket}/> } />
         </Routes>
-      </div>
     </BrowserRouter>
+    </div>
   );
 }
 

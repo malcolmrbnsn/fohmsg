@@ -13,12 +13,14 @@ const Home = ({socket}) => {
     }
 
     return (
-        <form className='home__container' onSubmit={handleSubmit}>
-            <h2>Sign in to Chat</h2>
-            <input type="text" name="username" id="username" value={username} onChange={e => setUsername(e.target.value)}/>
-            <button type="submit">Sign In</button>
+        <div className='home'>
+            <form className='home form' onSubmit={handleSubmit}>
+                <h1>Sign in to Chat</h1>
+                <input type="text" className='' name="username" id="username" value={username} onChange={e => setUsername(e.target.value)}/>
+                <button type="submit">Sign In</button>
 
-        </form>
+            </form>
+        </div>
     )
 }
 

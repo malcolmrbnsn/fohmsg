@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ChatBar = ({ socket }) => {
-    const [users, setUsers] = useState([]);
+const ChatBar = ({ users }) => {
+
 
     const navigate = useNavigate();
 
@@ -12,9 +12,6 @@ const ChatBar = ({ socket }) => {
         window.location.reload();
     }
 
-    useEffect(() => {
-        socket.on('newUserResponse', data => setUsers(data));
-    }, [socket, users]);
 
     return (
         <div>
