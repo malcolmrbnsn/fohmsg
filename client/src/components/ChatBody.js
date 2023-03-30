@@ -23,8 +23,6 @@ const ChatBody = ({socket, message, setMessage}) => {
             <textarea className="textbox"
                 type="text"
                 value={message.message}
-                // cols="80"
-                // rows="5"
                 onChange={handleTyping}
             />
             <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p>
