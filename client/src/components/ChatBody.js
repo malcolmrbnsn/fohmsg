@@ -18,15 +18,16 @@ const ChatBody = ({socket, message, setMessage}) => {
     });
 
     return (
-        <div>
-            <textarea
+        <div className="main">
+            {/* <div className="textbox" contentEditable="true" onBlur={handleTyping}>{message.message} aaaaa</div> */}
+            <textarea className="textbox"
                 type="text"
                 value={message.message}
-                cols="80"
-                rows="5"
+                // cols="80"
+                // rows="5"
                 onChange={handleTyping}
             />
-            <p>Edited {moment(message.date).fromNow()} ago by {message.username}</p>
+            <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p>
         </div>
     )
 }

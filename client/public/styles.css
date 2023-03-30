@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  html,
+  body, #root {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Style the body */
+  body {
+    font-family: Arial;
+    margin: 0;
+    height: 100%;
+  }
+  
+  /* Column container */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+  }
+  
+  /* Create two unequal columns that sits next to each other */
+  /* Sidebar/left column */
+  .side {
+    flex: 20%;
+    background-color: rgb(26, 23, 23);
+    padding: 20px;
+    color: white;
+    /*   height: 100%; */
+  }
+  
+  /* Main column */
+  .main {
+    flex: 80%;
+    height: 100%;
+    background-color: white;
+    padding: 20px;
+    background-color: black;
+    color: lightgreen;
+  }
+  
+  /*  */
+  .textbox {
+    width: 100%;
+    height: 100%;
+    white-space: normal;
+    text-align: justify;
+    -moz-text-align-last: center;
+    text-align-last: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    background-color: black;
+    color: wheat;
+    outline: none;
+    border: none;
+    font-weight: bold;
+  }
+  
+  .lastmsg {
+    display: flex;
+    align-items: flex-end;
+    margin: 0;
+    border: 0;
+  }
+  
+  /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 700px) {
+    .row,
+    .navbar {
+      flex-direction: column;
+    }
+  }
+  
+  button {
+    background-color: #4caf50; /* Green */
+    border: none;
+    color: white;
+    padding: 13px 14px;
+    margin: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    background-color: #555555;
+  }
+  
+  .connected {
+    color: green;
+  }
+  
+  .disconnected {
+    color: red;
+  }

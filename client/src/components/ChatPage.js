@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ChatBar from "./ChatBar";
 import ChatBody from "./ChatBody";
 
-const ChatPage = ({socket}) => {
+const ChatPage = ({socket, isConnected}) => {
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState({});
 
@@ -40,8 +40,8 @@ const ChatPage = ({socket}) => {
 
 
     return (
-        <div>
-            <ChatBar users={users}/>
+        <div className="row">
+            <ChatBar users={users} isConnected={isConnected}/>
             <ChatBody socket={socket} message={message} setMessage={setMessage} />
         </div>
     )
