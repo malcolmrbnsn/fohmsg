@@ -1,7 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import moment from 'moment';
 
-const ChatBar = ({ users, isConnected }) => {
+const ChatBar = ({ users, isConnected, message }) => {
 
 
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ const ChatBar = ({ users, isConnected }) => {
             <ul>
                 {users.map(user => <li key={user.socketID}>{user.username}</li>)}
             </ul>
+            <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p>
             <button>talk to me</button>
             <button>copy</button>
             <button>cancel</button>

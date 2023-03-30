@@ -15,6 +15,12 @@ stage 1
 - basic clear screen func
 - usernames :)
 
+- buttons working
+- hike state
+    - client reconnection + server
+    - fetching on connection
+
+
 
 stage 2
 - clear screen

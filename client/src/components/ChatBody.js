@@ -1,7 +1,6 @@
 import React from "react";
-import moment from 'moment';
 
-const ChatBody = ({socket, message, setMessage}) => {
+const ChatBody = ({socket, message}) => {
 
     const handleTyping = ((e) => {
         e.preventDefault();
@@ -14,18 +13,15 @@ const ChatBody = ({socket, message, setMessage}) => {
             });
         }
 
-        setMessage(e.target.value);
     });
 
     return (
         <div className="main">
-            {/* <div className="textbox" contentEditable="true" onBlur={handleTyping}>{message.message} aaaaa</div> */}
             <textarea className="textbox"
                 type="text"
                 value={message.message}
                 onChange={handleTyping}
             />
-            <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p>
         </div>
     )
 }
