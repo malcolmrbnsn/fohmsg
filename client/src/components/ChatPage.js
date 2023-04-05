@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ChatBar from "./ChatBar";
 import ChatBody from "./ChatBody";
 
-const ChatPage = ({socket, isConnected}) => {
+const ChatPage = ({ socket, isConnected }) => {
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState({});
 
@@ -16,6 +16,24 @@ const ChatPage = ({socket, isConnected}) => {
     useEffect(() => {
         socket.on('newUserResponse', data => setUsers(data));
     }, [socket, users]);
+
+    useEffect(() => {
+        const handleEsc = (event) => {
+            if (event.keyCode === 27) {
+                socket.emit('message', {
+                    message: "",
+                    username: localStorage.getItem('username'),
+                    socketID: socket.id,
+                    date: Date.now()
+                })
+            }
+        };
+        window.addEventListener('keydown', handleEsc);
+
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+        };
+    }, [socket]);
 
 
 
@@ -41,7 +59,7 @@ const ChatPage = ({socket, isConnected}) => {
 
     return (
         <div className="row">
-            <ChatBar users={users} message={message} isConnected={isConnected} socket={socket}/>
+            <ChatBar users={users} message={message} isConnected={isConnected} socket={socket} />
             <ChatBody socket={socket} message={message} setMessage={setMessage} />
         </div>
     )
