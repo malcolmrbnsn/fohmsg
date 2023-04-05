@@ -41,7 +41,7 @@ const ChatPage = ({socket, isConnected}) => {
 
     return (
         <div className="row">
-            <ChatBar users={users} message={message} isConnected={isConnected}/>
+            <ChatBar users={users} message={message} isConnected={isConnected} socket={socket}/>
             <ChatBody socket={socket} message={message} setMessage={setMessage} />
         </div>
     )
