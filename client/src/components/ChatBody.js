@@ -1,6 +1,6 @@
 import React from "react";
 
-const ChatBody = ({socket, message}) => {
+const ChatBody = ({ socket, message, setMessage }) => {
 
     const handleTyping = ((e) => {
         e.preventDefault();
@@ -11,6 +11,12 @@ const ChatBody = ({socket, message}) => {
                 socketID: socket.id,
                 date: Date.now()
             });
+            setMessage({
+                message: e.target.value,
+                username: localStorage.getItem('username'),
+                socketID: socket.id,
+                date: Date.now()
+            })
         }
 
     });
