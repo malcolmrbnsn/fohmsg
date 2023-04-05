@@ -11,12 +11,6 @@ const ChatBody = ({ socket, message, setMessage }) => {
                 socketID: socket.id,
                 date: Date.now()
             });
-            setMessage({
-                message: e.target.value,
-                username: localStorage.getItem('username'),
-                socketID: socket.id,
-                date: Date.now()
-            })
         }
 
     });

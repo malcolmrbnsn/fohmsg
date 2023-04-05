@@ -35,7 +35,7 @@ socketIO.on('connection', (socket) => {
     socket.on('message', data => {
       message = data;
       console.log(`CONN: message ${data.message} from ${data.username}`);
-      socket.broadcast.emit('messageResponse', data);
+      socketIO.emit('messageResponse', data);
     });
 
     socket.on('disconnect', () => {
