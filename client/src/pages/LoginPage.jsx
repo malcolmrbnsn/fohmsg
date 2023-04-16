@@ -1,15 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const Home = ({socket}) => {
-    const navigate = useNavigate();
+const LoginPage = ({login}) => {
     const [username, setUsername] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        localStorage.setItem('username', username);
-        socket.emit('newUser', {username, socketID: socket.id});
-        navigate("/chat");
+        login(username);
     }
 
     return (
@@ -24,4 +20,4 @@ const Home = ({socket}) => {
     )
 }
 
-export default Home;
+export default LoginPage;

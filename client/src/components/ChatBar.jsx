@@ -1,16 +1,12 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import moment from 'moment';
 import ChatButton from "./ChatButton";
 
 const ChatBar = ({ users, isConnected, message, socket }) => {
 
-    const navigate = useNavigate();
 
     const handleChatLeave = () => {
         localStorage.removeItem('username');
-        navigate("/");
-        window.location.reload();
     }
 
     const alertButtons = [

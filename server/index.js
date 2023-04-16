@@ -10,7 +10,7 @@ app.use(cors());
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://100.97.123.8:3000"
+        origin: "http://localhost:3000"
     }
 });
 
