@@ -1,22 +1,14 @@
 import { useState } from 'react';
 
-<<<<<<<< HEAD:client/src/pages/LoginPage.jsx
-const LoginPage = ({login}) => {
-========
 const HomePage = ({handleLogin}) => {
->>>>>>>> restructure:client/src/pages/HomePage.jsx
     const [username, setUsername] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-<<<<<<<< HEAD:client/src/pages/LoginPage.jsx
-        login(username);
-========
         handleLogin(username);
     }
     const handleChange = (e) => {
         setUsername(e.target.value)
->>>>>>>> restructure:client/src/pages/HomePage.jsx
     }
 
     return (
@@ -31,8 +23,4 @@ const HomePage = ({handleLogin}) => {
     )
 }
 
-<<<<<<<< HEAD:client/src/pages/LoginPage.jsx
-export default LoginPage;
-========
 export default HomePage;
->>>>>>>> restructure:client/src/pages/HomePage.jsx
