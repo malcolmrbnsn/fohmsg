@@ -1,26 +1,39 @@
-import React, {useState, useEffect, isValidElement} from 'react';
-import LoginPage from './pages/LoginPage';
+import React, { useState, useEffect } from 'react';
+import HomePage from './pages/HomePage';
+import socketIO from 'socket.io-client';
 import ChatPage from './pages/ChatPage';
-import { socket } from './socket';
+import './App.css';
 
-import './App.css'
+const socket = socketIO.connect("http://127.0.0.1:3001");
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [users, setUsers] = useState([]);
+  const [message, setMessage] = useState({});
 
-  // if (localStorage.getItem('username')) {
-  //   setLoggedIn(true);
-  //   setUsername(localStorage.getItem('username'));
-  // }
-
-  function login(usr) {
-    localStorage.setItem('username', usr);
-    setUsername(usr);
+  function handleLogin(value) {
+    localStorage.setItem('username', value);
+    socket.emit('newUser', { username: value, socketID: socket.id });
     setLoggedIn(true);
+    setUsername(value);
   }
+
+  function handleLogout() {
+    localStorage.removeItem('username');
+    setLoggedIn(false);
+  }
+
+  function handleTyping(text) {
+    socket.emit('message', {
+      text,
+      username,
+      socketID: socket.id,
+      date: Date.now()
+    });
+  }
+
 
   useEffect(() => {
     function onConnect() {
@@ -40,13 +53,38 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!loggedIn) {
+      const _username = localStorage.getItem('username')
+      if (_username) {
+        handleLogin(_username);
+      }
+    }
+  }, [loggedIn]);
+
+  useEffect(() => {
+    socket.on('messageResponse', data => {
+      setMessage(data);
+    });
+    return () => {
+      socket.off('messageResponse');
+    }
+  }, [message]);
+
+  useEffect(() => {
+    socket.on('newUserResponse', data => setUsers(data));
+    return () => {
+      socket.off('newUserResponse');
+    }
+  }, [users]);
+
   return (
     <div>
-        {
-        loggedIn ? 
-        <ChatPage messages={messages}/>
-        : <LoginPage login={login}/>
-        }
+      {
+        loggedIn ?
+          <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} users={users} message={message} /> :
+          <HomePage handleLogin={handleLogin} />
+      }
     </div>
   );
 }

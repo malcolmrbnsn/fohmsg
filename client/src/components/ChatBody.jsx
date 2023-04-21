@@ -1,26 +1,18 @@
 import React from "react";
 
-const ChatBody = ({ socket, message, setMessage }) => {
+const ChatBody = ({ message, handleTyping }) => {
 
-    const handleTyping = ((e) => {
+    const onChange = ((e) => {
         e.preventDefault();
-        if (localStorage.getItem('username')) {
-            socket.emit('message', {
-                message: e.target.value,
-                username: localStorage.getItem('username'),
-                socketID: socket.id,
-                date: Date.now()
-            });
-        }
-
+        handleTyping(e.target.value);
     });
 
     return (
         <div className="main">
             <textarea className="textbox"
                 type="text"
-                value={message.message}
-                onChange={handleTyping}
+                value={message.text}
+                onChange={onChange}
             />
         </div>
     )
