@@ -78,14 +78,12 @@ function App() {
     }
   }, [users]);
 
+let Element = loggedIn ?
+    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} users={users} message={message} /> :
+    <HomePage handleLogin={handleLogin} />
+
   return (
-    <div>
-      {
-        loggedIn ?
-          <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} users={users} message={message} /> :
-          <HomePage handleLogin={handleLogin} />
-      }
-    </div>
+    Element
   );
 }
 
