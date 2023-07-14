@@ -14,34 +14,31 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
-let users = [];
-let message = {
-  text: '',
-  username: 'host',
-  socketID: '',
-  date: Date.now()
-};
+// create the chatroom
+const Chatroom = require('./chatroom');
+const chatroom = new Chatroom("default");
 
 socketIO.on('connection', (socket) => {
     console.log(`CONN: ${socket.id} connected`);
 
     socket.on('newUser', data => {
-      users.push(data);
-      console.log(`CONN: ${socket.id} logged in as ${data.username}`);
-      socketIO.emit('newUserResponse', users);
-      socket.emit('messageResponse', message);
+      const username = {data};
+      chatroom.addUser(socket.id, username);
+      console.log(`CONN: ${socket.id} logged in as ${username}`);
+      // socketIO.emit('newUserResponse', users);
+      // socket.emit('messageResponse', message);
     });
 
     socket.on('message', data => {
-      message = data;
+      chatroom.addMessage(socket.id, data.message);
       console.log(`CONN: message ${data.text} from ${data.username}`);
-      socketIO.emit('messageResponse', data);
+      // socketIO.emit('messageResponse', data);
     });
 
     socket.on('disconnect', () => {
       console.log(`CONN: ${socket.id} disconnected`);
-      users = users.filter((user) => user.socketID !== socket.id);
-      socketIO.emit('newUserResponse', users);
+      chatroom.setUserStatus(socket.id, 0);
+      // socketIO.emit('newUserResponse', users);
     });
 });
 
