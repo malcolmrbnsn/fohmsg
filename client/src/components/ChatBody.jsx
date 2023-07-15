@@ -1,6 +1,6 @@
 import React from "react";
 
-const ChatBody = ({ message, handleTyping }) => {
+const ChatBody = ({ chatroom, handleTyping }) => {
 
     const onChange = ((e) => {
         e.preventDefault();
@@ -11,8 +11,8 @@ const ChatBody = ({ message, handleTyping }) => {
         <div className="main">
             <textarea className="textbox"
                 type="text"
-                value={message.text}
-                onChange={onChange}
+                // value={message.text}
+                // onChange={onChange}
             />
         </div>
     )

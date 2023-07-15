@@ -1,7 +1,7 @@
 import React from "react";
-import moment from 'moment';
+// import moment from 'moment';
 
-const ChatBar = ({ users, isConnected, message, handleLogout}) => {
+const ChatBar = ({ chatroom, isConnected, handleLogout}) => {
 
     return (
         <div className="side">
@@ -9,11 +9,12 @@ const ChatBar = ({ users, isConnected, message, handleLogout}) => {
             <h2 className="connected">Connected</h2> : 
             <h2 className="disconnected">Disconnected</h2>}
             <button onClick={handleLogout}>Disconnect</button>
+
             <h4>Active Users</h4>
             <ul>
-                {users.map(user => <li key={user.socketID}>{user.username}</li>)}
+                {chatroom.map(user => <li key={user.socketID}>{user.username}</li>)}
             </ul>
-            <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p>
+            {/* <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p> */}
         </div>
     )
 }

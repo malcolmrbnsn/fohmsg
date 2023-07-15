@@ -56,6 +56,10 @@ class Chatroom {
   
       return usersWithLastMessage;
     }
+
+    debug() {
+      return this.users;
+    }
   
     getChatroomID() {
       return this.chatroomID;

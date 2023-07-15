@@ -18,14 +18,24 @@ const socketIO = require('socket.io')(http, {
 const Chatroom = require('./chatroom');
 const chatroom = new Chatroom("default");
 
+app.get("/help", (req, res, next) => {
+  res.json(chatroom.debug());
+});
+
 socketIO.on('connection', (socket) => {
     console.log(`CONN: ${socket.id} connected`);
 
     socket.on('joinChatroom', data => {
-      const username = {data};
-      chatroom.addUser(socket.id, username);
+      const {username} = data;
+      if (chatroom.getUser(socket.id)) {
+        chatroom.setUserStatus(socket.id, 1);
+      } else {
+        chatroom.addUser(socket.id, username);
+      }
+      
       console.log(`CONN: ${socket.id} logged in as ${username}`);
       socketIO.emit('push', chatroom.getLastMessages());
+      // TODO: if username exists, replace socketID and set online>??? 
     });
 
     socket.on('sendMessage', data => {

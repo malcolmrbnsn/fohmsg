@@ -10,23 +10,23 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [users, setUsers] = useState([]);
-  const [message, setMessage] = useState({});
+  const [chatroom, setChatroom] = useState([]);
 
   function handleLogin(value) {
     localStorage.setItem('username', value);
-    socket.emit('newUser', { username: value, socketID: socket.id });
+    socket.emit('joinChatroom', { username: value });
     setLoggedIn(true);
     setUsername(value);
   }
 
   function handleLogout() {
+    socket.emit("leaveChatroom");
     localStorage.removeItem('username');
     setLoggedIn(false);
   }
 
   function handleTyping(text) {
-    socket.emit('message', {
+    socket.emit('sendMessage', {
       text,
       username,
       socketID: socket.id,
@@ -63,23 +63,16 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    socket.on('messageResponse', data => {
-      setMessage(data);
+    socket.on('push', data => {
+      setChatroom(data);
     });
     return () => {
-      socket.off('messageResponse');
+      socket.off('push');
     }
-  }, [message]);
-
-  useEffect(() => {
-    socket.on('newUserResponse', data => setUsers(data));
-    return () => {
-      socket.off('newUserResponse');
-    }
-  }, [users]);
+  }, [chatroom]);
 
 let Element = loggedIn ?
-    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} users={users} message={message} /> :
+    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} chatroom={chatroom} /> :
     <HomePage handleLogin={handleLogin} />
 
   return (
