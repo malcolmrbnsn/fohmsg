@@ -25,20 +25,19 @@ socketIO.on('connection', (socket) => {
       const username = {data};
       chatroom.addUser(socket.id, username);
       console.log(`CONN: ${socket.id} logged in as ${username}`);
-      // socketIO.emit('newUserResponse', users);
-      // socket.emit('messageResponse', message);
+      socketIO.emit('pushMessages', chatroom.getLastMessages());
     });
 
     socket.on('message', data => {
       chatroom.addMessage(socket.id, data.message);
       console.log(`CONN: message ${data.text} from ${data.username}`);
-      // socketIO.emit('messageResponse', data);
+      socketIO.emit('pushMessages', chatroom.getLastMessages());
     });
 
     socket.on('disconnect', () => {
       console.log(`CONN: ${socket.id} disconnected`);
       chatroom.setUserStatus(socket.id, 0);
-      // socketIO.emit('newUserResponse', users);
+      socketIO.emit('pushMessages', chatroom.getLastMessages());
     });
 });
 

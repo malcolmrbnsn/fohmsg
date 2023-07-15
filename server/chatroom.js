@@ -41,8 +41,25 @@ class Chatroom {
       const user = this.getUser(userID);
       return user ? user.messages : [];
     }
+
+    getLastMessages() {
+      const usersWithLastMessage = this.users.map(user => {
+        const lastMessageIndex = user.messages.length - 1;
+        const lastMessage = lastMessageIndex >= 0 ? user.messages[lastMessageIndex] : null;
+  
+        return {
+          userID: user.userID,
+          username: user.username,
+          lastMessage
+        };
+      });
+  
+      return usersWithLastMessage;
+    }
   
     getChatroomID() {
       return this.chatroomID;
     }
   }
+
+module.exports = Chatroom
