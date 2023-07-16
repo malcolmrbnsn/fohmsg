@@ -11,6 +11,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [chatroom, setChatroom] = useState([]);
+  const [message, setMessage] = useState([]);
 
   function handleLogin(value) {
     localStorage.setItem('username', value);
@@ -28,8 +29,7 @@ function App() {
   function handleTyping(text) {
     socket.emit('sendMessage', {
       text,
-      username,
-      socketID: socket.id,
+      userID: socket.id,
       date: Date.now()
     });
   }
@@ -72,7 +72,7 @@ function App() {
   }, [chatroom]);
 
 let Element = loggedIn ?
-    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} chatroom={chatroom} /> :
+    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} chatroom={chatroom} username={username} /> :
     <HomePage handleLogin={handleLogin} />
 
   return (

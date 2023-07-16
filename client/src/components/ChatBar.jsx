@@ -1,20 +1,28 @@
 import React from "react";
 // import moment from 'moment';
 
-const ChatBar = ({ chatroom, isConnected, handleLogout}) => {
+const ChatBar = ({ isConnected, handleLogout, username }) => {
 
     return (
-        <div className="side">
-            { isConnected ?
-            <h2 className="connected">Connected</h2> : 
-            <h2 className="disconnected">Disconnected</h2>}
+        <div class="col-2">
+            <h4>{username}</h4>
+            {isConnected ?
+                <h2 className="connected">Connected</h2> :
+                <h2 className="disconnected">Disconnected</h2>}
             <button onClick={handleLogout}>Disconnect</button>
+            <div>
+                <h3>Default { }</h3>
+                <ul>
+                    <ul>
+                        {chatroom.map(user => <li key={user.socketID}>{user.username}</li>)}
+                    </ul>
+                </ul>
+            </div>
 
-            <h4>Active Users</h4>
-            <ul>
-                {chatroom.map(user => <li key={user.socketID}>{user.username}</li>)}
-            </ul>
-            {/* <p className="lastmsg">Last message {moment(message.date).fromNow()} ago by {message.username}</p> */}
+            <div class="{}">
+                <h4>Settings</h4>
+            </div>
+
         </div>
     )
 }
