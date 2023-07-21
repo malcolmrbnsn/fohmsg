@@ -7,22 +7,11 @@ const ChatBody = ({ chatroom, handleTyping }) => {
         handleTyping(e.target.value);
     });
 
-    const messages = chatroom.map(user => <div key={user.socketID}><h4>{user.username}</h4><p>{user.lastMessage.text}</p></div>)
+    const messages = chatroom.map(user => <div key={user.socketID}><h4>{user.username}</h4><p>{user.lastMessage?.text ?? ""}</p></div>)
+    // i
 
 
-    return (
-        <div className="">
-
-            <div className="main">
-                <textarea className="textbox"
-                    type="text"
-                // value={message.text}
-                // onChange={onChange}
-                />
-            </div>
-
-            <div class="col h-100">
-
+    return  <div class="col h-100">
                 <div>
                     <h1>Default</h1>
                 </div>
@@ -30,15 +19,14 @@ const ChatBody = ({ chatroom, handleTyping }) => {
                 {messages}
 
                 <div class="input-group">
-                    <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                    <textarea name="" class="form-control type_msg" placeholder="Type your message..."
+                        // value={message.text}
+                        value={"asdf"}
+                        onChange={onChange}
+                    ></textarea>
                 </div>
-
             </div>
 
-
-
-        </div>
-    )
 }
 
 export default ChatBody

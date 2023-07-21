@@ -1,10 +1,10 @@
 import React from "react";
 // import moment from 'moment';
 
-const ChatBar = ({ isConnected, handleLogout, username }) => {
+const ChatBar = ({ isConnected, handleLogout, username, chatroom }) => {
 
     return (
-        <div class="col-2">
+        <div className="col-2">
             <h4>{username}</h4>
             {isConnected ?
                 <h2 className="connected">Connected</h2> :
@@ -19,7 +19,7 @@ const ChatBar = ({ isConnected, handleLogout, username }) => {
                 </ul>
             </div>
 
-            <div class="{}">
+            <div className="{}">
                 <h4>Settings</h4>
             </div>
 
