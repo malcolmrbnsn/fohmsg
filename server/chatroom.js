@@ -2,6 +2,7 @@ class Chatroom {
     constructor(chatroomID) {
       this.chatroomID = chatroomID;
       this.users = [];
+      this.possibleStatuses = ["Offline", "Online", "Error"]
     }
   
     addUser(userID, username) {
@@ -50,7 +51,8 @@ class Chatroom {
         return {
           userID: user.userID,
           username: user.username,
-          lastMessage
+          lastMessage,
+          status: this.possibleStatuses[user.status]
         };
       });
   
