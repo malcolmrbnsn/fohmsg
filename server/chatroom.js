@@ -28,17 +28,17 @@ class Chatroom {
       Object.assign(toReplace, newUser);
   }
 
-  addMessage(userID, text) {
-    const user = this.getUser(userID);
+  addMessage(userID, message) {
+    const user = this.getUserByID(userID);
     if (user) {
-      const message = {
-        messageID: `message_${Date.now()}`,
-        text,
-        timestamp: new Date().toISOString()
-      };
+      // const message = {
+      //   messageID: `message_${Date.now()}`,
+      //   text,
+      //   timestamp: new Date().toISOString()
+      // };
       user.messages.push(message);
+      this.updateUser(user);
     }
-    this.updateUser(user);
   }
 
   setUserStatus(userID, newStatus) {
@@ -50,17 +50,32 @@ class Chatroom {
     this.updateUser(user);
   }
 
-  getMessages(userID) {
-    const user = this.getUser(userID);
-    return user ? user.messages : [];
-  }
+  // getMessages(userID) {
+  //   const user = this.getUserByID(userID);
+  //   return user ? user.messages : [];
+  // }
 
-  getData() {
-    return this.users;
+  getMessages() {
+    const usersWithLastMessage = this.users.map(user => {
+      let message = null;
+      const messagesLength = user.messages.length
+      if (messagesLength >=1) {
+        message = user.messages[messagesLength - 1]
+      }
+
+      return {
+        userID: user.userID,
+        username: user.username,
+        message,
+        status: this.possibleStatuses[user.status]
+      };
+    });
+    return usersWithLastMessage;
   }
 
   debug() {
     return this.users;
+    // return this.getMessages();
   }
 
   getChatroomID() {

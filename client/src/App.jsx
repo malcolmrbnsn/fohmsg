@@ -11,7 +11,7 @@ function App() {
   const [username, setUsername] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [chatroom, setChatroom] = useState([]);
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState({});
 
   function handleLogin(value) {
     localStorage.setItem('username', value);
@@ -27,10 +27,12 @@ function App() {
   }
 
   function handleTyping(text) {
-    socket.emit('sendMessage', {
-      text,
-      userID: socket.id,
-      date: Date.now()
+    socket.emit('message', {
+      message: {
+        text,
+        userID: socket.id,
+        date: Date.now()
+      }
     });
   }
 
@@ -64,6 +66,18 @@ function App() {
 
   useEffect(() => {
     socket.on('push', data => {
+      // filter our user from message
+      let user = data.filter(usr => usr.userID === socket.id);
+      // // set our message
+      let userMessage = {}
+      if (user.message) {
+        userMessage = user.message
+      }
+      // } else {
+        // userMessage = { text: "" }
+      // }
+      setMessage(userMessage);
+      // set chatroom
       setChatroom(data);
     });
     return () => {
@@ -71,8 +85,8 @@ function App() {
     }
   }, [chatroom]);
 
-let Element = loggedIn ?
-    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} chatroom={chatroom} username={username} /> :
+  let Element = loggedIn ?
+    <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} chatroom={chatroom} username={username} message={message} /> :
     <HomePage handleLogin={handleLogin} />
 
   return (

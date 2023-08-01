@@ -19,7 +19,7 @@ const HomePage = ({handleLogin}) => {
           <h1>FOHMSG</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label for="username" className="form-label">Username</label>
+              <label htmlFor="username" className="form-label">Username</label>
               <input type="text" className="form-control" id="username" value={username} onChange={handleChange}/>
             </div>
             {/* <div className="mb-3">

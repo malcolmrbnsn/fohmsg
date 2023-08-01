@@ -18,8 +18,13 @@ const socketIO = require('socket.io')(http, {
 const Chatroom = require('./chatroom');
 const chatroom = new Chatroom("default");
 
-app.get("/help", (req, res, next) => {
+app.get("/help/all", (req, res, next) => {
   res.json(chatroom.debug());
+});
+
+
+app.get("/help/user", (req, res, next) => {
+  res.json(chatroom.getMessages());
 });
 
 socketIO.on('connection', (socket) => {
@@ -35,26 +40,22 @@ socketIO.on('connection', (socket) => {
       } else {
         chatroom.addUser(socket.id, username);
       }
-      // if (chatroom.getUserByID(socket.id) || chatroom.getUserByUsername(username)){
-        // chatroom.setUserStatus(socket.id, 1);
-      // } else {
-        // chatroom.addUser(socket.id, username);
-      // }
       
       console.log(`CONN: ${socket.id} logged in as ${username}`);
-      socketIO.emit('push', chatroom.getData());
+      socketIO.emit('push', chatroom.getMessages());
       // TODO: if username exists, replace socketID and set online>??? 
     });
 
-    socket.on('sendMessage', data => {
-      chatroom.addMessage(socket.id, data.message);
-      console.log(`CONN: message ${data.text} from ${data.username}`);
-      socketIO.emit('push', chatroom.getData());
+    socket.on('message', data => {
+      const {message} = data;
+      chatroom.addMessage(socket.id, message);
+      console.log(`CONN: message ${message.text} from ${message.userID}`);
+      socketIO.emit('push', chatroom.getMessages());
     });
 
     socket.on('leaveChatroom', data => {
       chatroom.setUserStatus(socket.id, 0);
-      socketIO.emit('push', chatroom.getData());
+      socketIO.emit('push', chatroom.getMessages());
 
     })
 
@@ -63,7 +64,7 @@ socketIO.on('connection', (socket) => {
       if (chatroom.getUserByID(socket.id)){
         chatroom.setUserStatus(socket.id, 0);
     }
-      socketIO.emit('push', chatroom.getData());
+      socketIO.emit('push', chatroom.getMessages());
     });
 });
 

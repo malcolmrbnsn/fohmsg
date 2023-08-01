@@ -13,9 +13,7 @@ const ChatBar = ({ isConnected, handleLogout, username, chatroom }) => {
             <div>
                 <h3>Default { }</h3>
                 <ul>
-                    <ul>
-                        {chatroom.map(user => <li key={user.socketID}>{user.username} - {user.status}</li>)}
-                    </ul>
+                        {chatroom.map(user => <li key={user.userID}>{user.username} - {user.status}</li>)}
                 </ul>
             </div>
 
