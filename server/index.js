@@ -4,13 +4,14 @@ const app = express();
 const http = require('http').Server(app);
 
 const PORT = 3001;
+const IP = '100.97.123.8'
 
 const cors = require('cors');
 app.use(cors());
 
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: "http://100.97.123.8:3000"
     }
 });
 
@@ -54,7 +55,9 @@ socketIO.on('connection', (socket) => {
     });
 
     socket.on('leaveChatroom', data => {
-      chatroom.setUserStatus(socket.id, 0);
+      if (chatroom.getUserByID(socket.id)){
+        chatroom.setUserStatus(socket.id, 0);
+    }
       socketIO.emit('push', chatroom.getMessages());
 
     })
@@ -69,6 +72,6 @@ socketIO.on('connection', (socket) => {
 });
 
 
-http.listen(PORT, () => {
-  console.log(`HTTP: Listening on ${PORT}`);
+http.listen(PORT, IP, () => {
+  console.log(`HTTP: Listening on ${IP}:${PORT}`);
 });

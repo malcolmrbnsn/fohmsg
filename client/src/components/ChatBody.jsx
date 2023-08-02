@@ -1,4 +1,6 @@
 import React from "react";
+import RelativeDate from '../atomics/RelativeDate';
+
 
 const ChatBody = ({ chatroom, handleTyping, message }) => {
 
@@ -7,14 +9,27 @@ const ChatBody = ({ chatroom, handleTyping, message }) => {
         handleTyping(e.target.value);
     });
 
-    const messages = chatroom.map(user => <div key={user.userID}><h4>{user.username}</h4><p>{user.message?.text ?? ""}</p></div>)
-
-    return  <div className="col h-100">
-                <div>
-                    <h1>Default</h1>
+    const messages = chatroom.map(user => {
+        // no empty messages
+        if (user.message) {
+            return <div key={user.userID}>
+                <h4>{user.username}</h4>
+                <em><RelativeDate date={new Date(user.message.date)}/></em>
+                <p>&nbsp;{user.message.text}</p>
                 </div>
+        }
+        else {
+            return <div key={user.userID}>
+            <h4>{user.username}</h4>
+            <p>&nbsp;</p>
+            </div>
+        }
+    })
+
+    return  <div className="col-md-10 h-100">
 
                 {messages}
+
 
                 <div className="input-group">
                     <textarea name="" className="form-control type_msg" placeholder="Type your message..."
@@ -22,6 +37,7 @@ const ChatBody = ({ chatroom, handleTyping, message }) => {
                         onChange={onChange}
                     ></textarea>
                 </div>
+
             </div>
 
 }

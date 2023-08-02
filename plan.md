@@ -7,19 +7,14 @@ error codes:
 
 
 ## current func
-- synchronus chat
-    - one chatroom, shared input
-- display connection, active reconnects
-    - messages dont queue up offline
-- alert buttons
-- clear screen
+- asynchronus chat
+    - one chatroom, one input per user
+- connection, active reconnects
 - active user list
 - simple usernames, last edited
 
-
 todo
 - reconnect + login state properly
-- raise state, implement helpers
 
 
 

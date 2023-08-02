@@ -4,7 +4,7 @@ import socketIO from 'socket.io-client';
 import ChatPage from './pages/ChatPage';
 import './App.css';
 
-const socket = socketIO.connect("http://127.0.0.1:3001");
+const socket = socketIO.connect("http://100.97.123.8:3001");
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -73,9 +73,6 @@ function App() {
       if (user.message) {
         userMessage = user.message
       }
-      // } else {
-        // userMessage = { text: "" }
-      // }
       setMessage(userMessage);
       // set chatroom
       setChatroom(data);
@@ -83,7 +80,7 @@ function App() {
     return () => {
       socket.off('push');
     }
-  }, [chatroom]);
+  }, [chatroom, message]);
 
   let Element = loggedIn ?
     <ChatPage isConnected={isConnected} handleTyping={handleTyping} handleLogout={handleLogout} chatroom={chatroom} username={username} message={message} /> :
