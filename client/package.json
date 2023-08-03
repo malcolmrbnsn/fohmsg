@@ -17,6 +17,7 @@
     "react-scripts": "5.0.1",
     "react-time-ago": "^7.2.1",
     "socket.io-client": "^4.6.1",
+    "uuid": "^9.0.0",
     "wait-on": "^5.2.1",
     "web-vitals": "^2.1.4"
   },

@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import HomePage from './pages/HomePage';
 import socketIO from 'socket.io-client';
 import ChatPage from './pages/ChatPage';
+import { v4 as uuidv4 } from 'uuid';
+
 import './App.css';
 
 const socket = socketIO.connect("http://100.97.123.8:3001");
@@ -13,24 +15,27 @@ function App() {
   const [chatroom, setChatroom] = useState([]);
   const [message, setMessage] = useState({});
 
-  function handleLogin(value) {
+  const handleLogin = useCallback(value =>  {
     localStorage.setItem('username', value);
-    socket.emit('joinChatroom', { username: value });
+    const userID = localStorage.getItem('userID')
+      socket.emit('joinChatroom', { username: value, userID });
     setLoggedIn(true);
     setUsername(value);
-  }
+  }, [setLoggedIn, setUsername])
 
   function handleLogout() {
-    socket.emit("leaveChatroom");
+    const userID = localStorage.getItem('userID')
+    socket.emit("leaveChatroom", {userID});
     localStorage.removeItem('username');
     setLoggedIn(false);
   }
 
   function handleTyping(text) {
+    const userID = localStorage.getItem('userID')
     socket.emit('message', {
       message: {
         text,
-        userID: socket.id,
+        userID,
         date: Date.now()
       }
     });
@@ -57,12 +62,17 @@ function App() {
 
   useEffect(() => {
     if (!loggedIn) {
+      const _userID = localStorage.getItem('userid')
+      if (!_userID) {
+        const key = uuidv4();
+        localStorage.setItem('userID', key);
+      }
       const _username = localStorage.getItem('username')
       if (_username) {
         handleLogin(_username);
       }
     }
-  }, [loggedIn]);
+  }, [loggedIn, handleLogin]);
 
   useEffect(() => {
     socket.on('push', data => {
