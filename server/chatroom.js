@@ -1,7 +1,7 @@
 class Chatroom {
   constructor(chatroomID) {
     this.chatroomID = chatroomID;
-    this.users = [];
+    this.users = new Map();
     this.possibleStatuses = ["Offline", "Online", "Error"]
   }
 
@@ -12,30 +12,22 @@ class Chatroom {
       status: 1, // 0: offline, 1: online, 2: error
       messages: []
     };
-    this.users.push(user);
+    this.users.set(userID, user);
   }
 
-  getUserByID(userID) {
-    return this.users.find(user => user.userID === userID);
+  getUser(userID) {
+    return this.users.get(userID);
   }
 
-  getUserByUsername(username) {
-    return this.users.find(user => user.username === username);
-  }
-
-  updateUser(newUser) {
-      let toReplace = this.getUserByID(newUser.userID);
-      Object.assign(toReplace, newUser);
+  updateUser(user) {
+    if (user && user.userID) {
+      this.users.set(user.userID, user);
+    }
   }
 
   addMessage(userID, message) {
-    const user = this.getUserByID(userID);
+    const user = this.getUser(userID);
     if (user) {
-      // const message = {
-      //   messageID: `message_${Date.now()}`,
-      //   text,
-      //   timestamp: new Date().toISOString()
-      // };
       user.messages.push(message);
       this.updateUser(user);
     }
@@ -55,23 +47,31 @@ class Chatroom {
   //   return user ? user.messages : [];
   // }
 
-  getMessages() {
-    const usersWithLastMessage = this.users.map(user => {
-      let message = null;
-      const messagesLength = user.messages.length
-      if (messagesLength >=1) {
-        message = user.messages[messagesLength - 1]
-      }
+  // getMessages() {
+  //   const usersWithLastMessage = this.users.map(user => {
+  //     let message = null;
+  //     const messagesLength = user.messages.length
+  //     if (messagesLength >=1) {
+  //       message = user.messages[messagesLength - 1]
+  //     }
 
-      return {
-        userID: user.userID,
-        username: user.username,
-        message,
-        status: this.possibleStatuses[user.status]
-      };
-    });
-    return usersWithLastMessage;
+  //     return {
+  //       userID: user.userID,
+  //       username: user.username,
+  //       message,
+  //       status: this.possibleStatuses[user.status]
+  //     };
+  //   });
+  //   return usersWithLastMessage;
+  // }
+
+  getmessages() {
+    return Array.from(this.users.values());
+    // Alternatively, you can use the spread syntax:
+    // return [...this.users.values()];
   }
+
+
 
   debug() {
     return this.users;
