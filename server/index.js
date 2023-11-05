@@ -4,71 +4,74 @@ const app = express();
 const http = require('http').Server(app);
 
 const PORT = 3001;
-const IP = '100.97.123.8'
-
-const cors = require('cors');
-app.use(cors());
+const IP = '127.0.0.1'
 
 const socketIO = require('socket.io')(http, {
-    cors: {
-        origin: "http://100.97.123.8:3000"
-    }
+  cors: {
+    origin: "http://127.0.0.1:3000"
+  }
 });
 
 // create the chatroom
 const Chatroom = require('./chatroom');
-const chatroom = new Chatroom("default");
+const chatroom = new Chatroom();
 
-app.get("/help/all", (req, res, next) => {
-  res.json(chatroom.debug());
+app.get("/help/users", (req, res, next) => {
+  res.json([...chatroom.users.values()]);
 });
 
-
-app.get("/help/user", (req, res, next) => {
-  res.json(chatroom.getMessages());
+app.get("/help/messages", (req, res, next) => {
+  res.json(chatroom.messages);
 });
 
 socketIO.on('connection', (socket) => {
-    console.log(`CONN: ${socket.id} connected`);
+  console.log(`CONN: ${socket.id} connected`);
 
-    socket.on('joinChatroom', data => {
-      const {username} = data;
-      foundUser = chatroom.getUserByID(socket.id);
+  socket.on('joinChatroom', data => {
+    const { userID, username } = data;
+    if (userID) {
+      foundUser = chatroom.getUserById(userID);
       if (foundUser) {
         foundUser.username = username;
         foundUser.status = 1;
+        foundUser.socketID = socket.id;
         chatroom.updateUser(foundUser);
-      } else {
-        chatroom.addUser(socket.id, username);
+      }  else {
+      chatroom.addUser(userID, username, socket.id);
       }
-      
-      console.log(`CONN: ${socket.id} logged in as ${username}`);
-      socketIO.emit('push', chatroom.getMessages());
-      // TODO: if username exists, replace socketID and set online>??? 
-    });
-
-    socket.on('message', data => {
-      const {message} = data;
-      chatroom.addMessage(socket.id, message);
-      console.log(`CONN: message ${message.text} from ${message.userID}`);
-      socketIO.emit('push', chatroom.getMessages());
-    });
-
-    socket.on('leaveChatroom', data => {
-      if (chatroom.getUserByID(socket.id)){
-        chatroom.setUserStatus(socket.id, 0);
     }
-      socketIO.emit('push', chatroom.getMessages());
 
-    })
+    console.log(`CONN: ${socket.id} logged in as ${username}`);
+    socketIO.emit('push', chatroom.push());
+  });
 
-    socket.on('disconnect', () => {
-      console.log(`CONN: ${socket.id} disconnected`);
-      if (chatroom.getUserByID(socket.id)){
-        chatroom.setUserStatus(socket.id, 0);
+  socket.on('message', message => {
+    console.log(message)
+    chatroom.addMessage(message);
+    console.log(`CONN: message ${message.text} from ${message.userID}`);
+    socketIO.emit('push', chatroom.push());
+  });
+
+  socket.on('typing', data => {
+    const {userID} = data;
+    socketIO.emit('typing', {userID});
+  })
+
+  socket.on('leaveChatroom', data => {
+    const {userID} = data;
+    if (chatroom.getUserByID(userID)) {
+      chatroom.setUserStatus(userID, 0);
+    } else {
+      console.log("user left chat without a valid uid");
     }
-      socketIO.emit('push', chatroom.getMessages());
-    });
+    socketIO.emit('push', chatroom.push());
+  })
+
+  socket.on('disconnect', () => {
+    console.log(`CONN: ${socket.id} disconnected`);
+    chatroom.socketDisconnect(socket.id);
+    socketIO.emit('push', chatroom.push());
+  });
 });
 
 

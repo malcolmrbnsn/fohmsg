@@ -60,7 +60,7 @@ message types
 - connection
     - same sorta buttons as radio a1a2 etc
     - can be set by admin, overrides client (adv)
-    
+
 
 message data
 - groups
@@ -82,7 +82,7 @@ groups
 - group name
 - id to rename
 - read only, edit
-emergancy messages
+emergency messages
 
 window types
 - stay on top
@@ -95,6 +95,7 @@ federation, connected nodes
 - hierachy???
 emergancy messages
 
+
 whisper ??
 
 admin/server alerts
@@ -102,4 +103,4 @@ admin/server alerts
 - new connection
 - new user
 - prioirty message
-- ermangacy messages
+- emergancy messages

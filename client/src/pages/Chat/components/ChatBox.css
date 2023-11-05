@@ -1,0 +1,23 @@
+.chat-footer {
+    flex: 0 1 40px;
+    background-color: #121F2B;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    /* background: rgba(0, 0, 0, 0.3); */
+    /* padding: 10px; */
+    /* position: relative; */
+}
+
+.chat-box {
+    width: 100%;
+    background: none;
+    border: none;
+    resize: none;
+    color: #ffffffb3;
+    /* font-size: 11px; */
+    /* height: 17px; */
+    margin: 0;
+    padding: 0;
+}

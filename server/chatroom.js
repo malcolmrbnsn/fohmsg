@@ -1,86 +1,150 @@
+const fs = require('fs');
+const USERPATH = './users.bin'
+const MSGPATH = './messages.bin'
+const BACKUP = false;
+
 class Chatroom {
-  constructor(chatroomID) {
-    this.chatroomID = chatroomID;
+  constructor() {
     this.users = new Map();
-    this.possibleStatuses = ["Offline", "Online", "Error"]
+    this.messages = [];
+    this.statuses = ["Offline", "Online"]
+
+    // import users
+    if (fs.existsSync(USERPATH)) {
+      fs.readFile(USERPATH, 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        this.users = new Map(JSON.parse(data));
+      });
+    }
+
+    if (fs.existsSync(MSGPATH)) {
+      fs.readFile(MSGPATH, 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        this.messages = JSON.parse(data);
+      });
+    }
+
   }
 
-  addUser(userID, username) {
+  writeUsers() {
+    if (BACKUP) {
+      const data = JSON.stringify(Array.from(this.users.entries()));
+      fs.writeFile(USERPATH, data, err => {
+        console.error(err);
+      })
+    }
+  }
+
+  writeMessages() {
+    if (BACKUP) {
+      const data = JSON.stringify(this.messages);
+      fs.writeFile(MSGPATH, data, err => {
+        console.error(err);
+      })
+    }
+  }
+
+
+  getUsers() {
+    return this.users;
+  }
+
+  getUserById(userId) {
+    return this.users.get(userId);
+  }
+
+  addUser(userID, username, socketID) {
     const user = {
       userID,
+      socketID,
       username,
       status: 1, // 0: offline, 1: online, 2: error
-      messages: []
     };
     this.users.set(userID, user);
-  }
-
-  getUser(userID) {
-    return this.users.get(userID);
+    this.writeUsers()
   }
 
   updateUser(user) {
     if (user && user.userID) {
       this.users.set(user.userID, user);
+    } else {
+      console.error("fuck");
     }
-  }
-
-  addMessage(userID, message) {
-    const user = this.getUser(userID);
-    if (user) {
-      user.messages.push(message);
-      this.updateUser(user);
-    }
+    this.writeUsers()
   }
 
   setUserStatus(userID, newStatus) {
     const user = this.getUserByID(userID);
     if (user) {
       user.status = newStatus;
+      this.updateUser(user);
     }
-
-    this.updateUser(user);
+    this.writeUsers()
   }
 
-  // getMessages(userID) {
-  //   const user = this.getUserByID(userID);
-  //   return user ? user.messages : [];
+  socketDisconnect(socketID) {
+    for (const [userId, user] of this.users) {
+      if (user.socketID === socketID) {
+        user.status = 0;
+        console.log(`STATUS: user ${user.username} disconnected`)
+        this.users.set(userId, user);
+        this.writeUsers();
+      }
+    }
+  }
+
+
+  addMessage(message) {
+    const {
+      userID,
+      username,
+      text,
+      time
+  } = message
+    const user = this.getUserById(message.userID);
+    if (user) {
+      const newMessage = {
+        username,
+        text,
+        time,
+        id: this.messages.length
+      };
+      this.messages.push(newMessage);
+      this.writeMessages();
+    } else {
+      console.log("SENDMESSAGE: message received doesnt have a user");
+    }
+  }
+
+  getMessages() {
+    return this.messages;
+  }
+  getUsers() {
+    return [...this.users.values()];
+  }
+
+  push() {
+
+    const messages = this.getMessages() || [];
+    const users = this.getUsers() || [];
+
+    return {
+      messages,
+      users
+    }
+  }
+
+  // debug() {
+  //   return [this.users, this.messages];
+  //   // return this.getMessages();
   // }
 
-  // getMessages() {
-  //   const usersWithLastMessage = this.users.map(user => {
-  //     let message = null;
-  //     const messagesLength = user.messages.length
-  //     if (messagesLength >=1) {
-  //       message = user.messages[messagesLength - 1]
-  //     }
-
-  //     return {
-  //       userID: user.userID,
-  //       username: user.username,
-  //       message,
-  //       status: this.possibleStatuses[user.status]
-  //     };
-  //   });
-  //   return usersWithLastMessage;
-  // }
-
-  getmessages() {
-    return Array.from(this.users.values());
-    // Alternatively, you can use the spread syntax:
-    // return [...this.users.values()];
-  }
-
-
-
-  debug() {
-    return this.users;
-    // return this.getMessages();
-  }
-
-  getChatroomID() {
-    return this.chatroomID;
-  }
 }
 
-module.exports = Chatroom
+module.exports = Chatroom;
