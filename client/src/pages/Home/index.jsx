@@ -10,7 +10,6 @@ export function Home() {
 	function handleSubmit(e) {
 		e.preventDefault();
 		if (username.length >= 1) {
-			console.log(username);
 			const newUserID = String(Math.floor(Math.random() * 1000000000))
 			localStorage.setItem("userID", newUserID);
 			localStorage.setItem("username", username);

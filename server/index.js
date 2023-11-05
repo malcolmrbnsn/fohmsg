@@ -46,7 +46,6 @@ socketIO.on('connection', (socket) => {
   });
 
   socket.on('message', message => {
-    console.log(message)
     chatroom.addMessage(message);
     console.log(`CONN: message ${message.text} from ${message.userID}`);
     socketIO.emit('push', chatroom.push());

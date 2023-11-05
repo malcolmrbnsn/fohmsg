@@ -1,5 +1,5 @@
 import { useLocation } from 'preact-iso';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { io } from 'socket.io-client';
 
 import { ChatHeader } from './components/ChatHeader';
@@ -17,11 +17,11 @@ export function Chat() {
     const [user, setUser] = useState({ userID: undefined, username: undefined });
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
+    const lastMessageRef = useRef(null);
 
     const location = useLocation();
 
     function sendMessage(text) {
-        console.log(text)
         const message = {
             userID: user.userID,
             username: user.username,
@@ -49,8 +49,6 @@ export function Chat() {
 
     useEffect(() => {
         socket.on("push", (data) => {
-            console.error("ow")
-            console.log(data);
             const newUsers = data.users;
             setUsers(newUsers);
             const newMessages = data.messages;
@@ -83,6 +81,11 @@ export function Chat() {
         };
     }, []);
 
+    useEffect(() => {
+        // 👇️ scroll to bottom every time messages change
+        lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, [messages]);
+
     const messageList = messages?.map((msg) => (
         <ChatMessage
           username={msg.username}
@@ -99,6 +102,7 @@ export function Chat() {
             <ChatHeader connected={connected} user={user} />
             <div className="chat-body">
                 {messageList}
+                <div ref={lastMessageRef} />
             </div>
             <ChatBox sendMessage={sendMessage}/>
         </div>
