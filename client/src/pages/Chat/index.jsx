@@ -17,6 +17,7 @@ export function Chat() {
     const [user, setUser] = useState({ userID: undefined, username: undefined });
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
+    const [typing, setTyping] = useState("");
     const lastMessageRef = useRef(null);
 
     const location = useLocation();
@@ -30,6 +31,16 @@ export function Chat() {
         }
         socket.emit("message", message);
     }
+
+    function sendTyping() {
+        socket.emit("typing", user.username)
+    }
+
+    useEffect(() => {
+        socket.on('typing', (username) => {
+            setTyping(username);
+        })
+    }, []) 
 
     // check login, redirect if not
     useEffect(() => {
@@ -82,7 +93,7 @@ export function Chat() {
     }, []);
 
     useEffect(() => {
-        // 👇️ scroll to bottom every time messages change
+        // scroll to bottom every time messages change
         lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
       }, [messages]);
 
@@ -104,7 +115,7 @@ export function Chat() {
                 {messageList}
                 <div ref={lastMessageRef} />
             </div>
-            <ChatBox sendMessage={sendMessage}/>
+            <ChatBox sendMessage={sendMessage} sendTyping={sendTyping} typing={typing}/>
         </div>
     );
 }

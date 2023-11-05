@@ -52,8 +52,9 @@ socketIO.on('connection', (socket) => {
   });
 
   socket.on('typing', data => {
-    const {userID} = data;
-    socketIO.emit('typing', {userID});
+    console.log(data);
+    // const {userID} = data;
+    socketIO.emit('typing', data);
   })
 
   socket.on('leaveChatroom', data => {

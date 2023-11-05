@@ -11,3 +11,7 @@ highlight new messages
 write messages, users at time instead of regularly
 
 dates show date if not current day
+
+header not fixed
+
+chrome + safari say disconnected???
