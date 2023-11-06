@@ -8,13 +8,13 @@ buttons at top right, disconnect, settings - just need interactivity
 flash messages
 highlight new messages
 
-write messages, users at time instead of regularly
+<!-- write messages, users at time instead of regularly -->
 
-dates show date if not current day
+<!-- dates show date if not current day -->
 
 chrome + safari say disconnected???
 
-quick scroll to bottom
+<!-- quick scroll to bottom -->
 
 mobile - samsung browser top bar hidden
 

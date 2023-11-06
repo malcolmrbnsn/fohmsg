@@ -30,7 +30,7 @@ export function ChatBox({ sendMessage, sendTyping, typing }) {
 
 
     return (
-        <footer>
+        <footer class="chat-footer">
             {formattedTyping && <div class="typing">{formattedTyping}</div>}
             
         <form class="input-container" onSubmit={handleSubmit}>    

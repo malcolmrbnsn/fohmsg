@@ -1,13 +1,13 @@
 import './ChatHeader.css';
 
-export function ChatHeader({user, connected}) {
+export function ChatHeader({user, connected, setSidebarVisible, visible}) {
 	return (
 		<div class="chat-header">
             <h2 class="header">{user.username} - {connected ?
-                <span className="connected">Connected</span> :
-                <span className="disconnected">Disconnected</span>}
+                <span class="connected">Connected</span> :
+                <span class="disconnected">Disconnected</span>}
             </h2>
-            {/* <div className="leave-chat">Leave Chat</div> */}
+            <button class="expand-sidebar" onClick={() => {setSidebarVisible(!visible)}}>{visible ? ">" : "<"}</button>
 		</div>
 	);
 }

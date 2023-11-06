@@ -65,6 +65,7 @@ class Chatroom {
       socketID,
       username,
       status: 1, // 0: offline, 1: online, 2: error
+      statusSince: 0
     };
     this.users.set(userID, user);
     this.writeUsers()
@@ -83,6 +84,7 @@ class Chatroom {
     const user = this.getUserByID(userID);
     if (user) {
       user.status = newStatus;
+      user.statusSince = Date.now();
       this.updateUser(user);
     }
     this.writeUsers()
@@ -92,6 +94,7 @@ class Chatroom {
     for (const [userId, user] of this.users) {
       if (user.socketID === socketID) {
         user.status = 0;
+        user.statusSince = Date.now();
         console.log(`STATUS: user ${user.username} disconnected`)
         this.users.set(userId, user);
         this.writeUsers();

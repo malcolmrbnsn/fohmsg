@@ -7,6 +7,7 @@ import { ChatBox } from './components/ChatBox';
 import { ChatMessage } from './components/ChatMessage';
 
 import './style.css';
+import { Sidebar } from './components/Sidebar';
 
 const SERVER_URL = "http://127.0.0.1:3001";
 const socket = io(SERVER_URL);
@@ -19,6 +20,7 @@ export function Chat() {
     const [typing, setTyping] = useState([]);
     const [isTyping, setIsTyping] = useState(false);
     const lastMessageRef = useRef(null);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
 
     let typingTimeout = null;
 
@@ -37,16 +39,16 @@ export function Chat() {
     function sendTyping() {
         // Emit 'typing' event when user starts typing
         if (!isTyping) {
-          setIsTyping(true);
-          socket.emit('typing', user.username); 
+            setIsTyping(true);
+            socket.emit('typing', user.username);
         }
 
         // Clear previous timeout and set a new one
         clearTimeout(typingTimeout);
         typingTimeout = setTimeout(() => {
-          setIsTyping(false);
-          socket.emit('notTyping', user.username); 
-        }, 3000); 
+            setIsTyping(false);
+            socket.emit('notTyping', user.username);
+        }, 3000);
     }
 
     useEffect(() => {
@@ -68,9 +70,7 @@ export function Chat() {
         }
     }, []);
 
-
-    // check login, redirect if not
-    useEffect(() => {
+    function joinChatroom() {
         const localUsername = localStorage.getItem("username");
         const localUserID = localStorage.getItem("userID");
         if (localUsername && localUserID) {
@@ -83,6 +83,13 @@ export function Chat() {
             // route
             location.route("/");
         }
+    }
+
+
+
+    // check login, redirect if not
+    useEffect(() => {
+        joinChatroom();
     }, []);
 
     useEffect(() => {
@@ -102,9 +109,7 @@ export function Chat() {
     useEffect(() => {
         function onConnect() {
             setConnected(true);
-            if (user.username && user.userID) {
-                socket.emit("joinChatroom", { userID: user.userID, username: user.username })
-            }
+            joinChatroom();
         }
         function onDisconnect() {
             setConnected(false);
@@ -121,26 +126,27 @@ export function Chat() {
 
     useEffect(() => {
         // scroll to bottom every time messages change
-        lastMessageRef.current?.scrollIntoView({ });
-      }, [messages]);
+        lastMessageRef.current?.scrollIntoView({});
+    }, [messages]);
 
     const messageList = messages?.map((msg) => (
         <ChatMessage
-          username={msg.username}
-          text={msg.text}
-          time={msg.time}
-          key={msg.id}
+            username={msg.username}
+            text={msg.text}
+            time={msg.time}
+            key={msg.id}
         />
-      ));
+    ));
 
     return (
         <div class="chat-page">
-            <ChatHeader connected={connected} user={user} />
+            <Sidebar visible={sidebarVisible} users={users}/>
+            <ChatHeader connected={connected} user={user} setSidebarVisible={setSidebarVisible} visible={sidebarVisible}/>
             <div className="chat-body">
                 {messageList}
                 <div ref={lastMessageRef} />
             </div>
-            <ChatBox sendMessage={sendMessage} sendTyping={sendTyping} typing={typing}/>
+            <ChatBox sendMessage={sendMessage} sendTyping={sendTyping} typing={typing} />
         </div>
     );
 }
