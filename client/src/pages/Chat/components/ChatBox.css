@@ -1,8 +1,29 @@
+
 .chat-footer {
-    /* padding: 10px;
     display: flex;
-    align-items: center; */
-    background-color: #121F2B;
+    flex-direction: column;
+    /* align-items: center; */
+    /* padding: 10px; */
+}
+
+.chat-footer .message-form {
+    flex: 1;
+}
+
+.chat-footer .message-input {
+    width: 100%;
+    padding: 8px;
+    border: none;
+}
+
+/* Hide scrollbar for the input in Firefox */
+.chat-footer .message-input {
+    scrollbar-width: none; /* Firefox */
+    padding: 5px;
+}
+
+.chat-footer .message-input::-webkit-scrollbar {
+    display: none; /* Webkit */
 }
 
 .typing {
@@ -10,23 +31,4 @@
     color: #888;
     font-style: italic;
     /* text-align: center; Center the typing indicator */
-}
-
-.input-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 5px;
-}
-.input-container input[type="text"] {
-    flex: 1;
-    padding: 8px;
-    margin-right: 5px;
-}
-.input-container button {
-    padding: 8px 17px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
 }

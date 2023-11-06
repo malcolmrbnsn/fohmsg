@@ -15,5 +15,5 @@
 .sidebar.active ~ .chat-header,
 .sidebar.active ~ .chat-body,
 .sidebar.active ~ .chat-footer {
-    width: calc(100% - 265px);
+    width: calc(100% - 261px);
 }
