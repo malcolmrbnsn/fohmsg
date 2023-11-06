@@ -15,9 +15,24 @@ export function ChatBox({ sendMessage, sendTyping, typing }) {
         sendTyping();
     }
 
+    const formatTypingUsers = (usersTyping) => {
+        if (usersTyping.length === 0) {
+          return ''; // Return empty string if nobody is typing
+        } else if (usersTyping.length === 1) {
+          return `${usersTyping[0]} is typing...`; // Format for one person typing
+        } else {
+          const typingUsersExceptLast = usersTyping.slice(0, -1).join(', ');
+          const lastTypingUser = usersTyping[usersTyping.length - 1];
+          return `${typingUsersExceptLast}, and ${lastTypingUser} are typing...`; // Format for multiple people typing
+        }
+      };
+      const formattedTyping = formatTypingUsers(typing);
+
+
     return (
         <footer>
-            <div class="typing">{typing}</div>
+            {formattedTyping && <div class="typing">{formattedTyping}</div>}
+            
         <form class="input-container" onSubmit={handleSubmit}>    
             <input
                 type="text"

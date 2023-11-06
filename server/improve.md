@@ -13,3 +13,18 @@ write messages, users at time instead of regularly
 dates show date if not current day
 
 chrome + safari say disconnected???
+
+quick scroll to bottom
+
+mobile - samsung browser top bar hidden
+
+ipad ui weird
+
+better logging
+
+add message type: system
+italic message, smaller font
+
+slash commands
+- clearance
+- alert

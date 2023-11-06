@@ -9,7 +9,6 @@ import { ChatMessage } from './components/ChatMessage';
 import './style.css';
 
 const SERVER_URL = "http://127.0.0.1:3001";
-// const socket = io();
 const socket = io(SERVER_URL);
 
 export function Chat() {
@@ -17,8 +16,11 @@ export function Chat() {
     const [user, setUser] = useState({ userID: undefined, username: undefined });
     const [users, setUsers] = useState([]);
     const [messages, setMessages] = useState([]);
-    const [typing, setTyping] = useState("");
+    const [typing, setTyping] = useState([]);
+    const [isTyping, setIsTyping] = useState(false);
     const lastMessageRef = useRef(null);
+
+    let typingTimeout = null;
 
     const location = useLocation();
 
@@ -33,14 +35,39 @@ export function Chat() {
     }
 
     function sendTyping() {
-        socket.emit("typing", user.username)
+        // Emit 'typing' event when user starts typing
+        if (!isTyping) {
+          setIsTyping(true);
+          socket.emit('typing', user.username); 
+        }
+
+        // Clear previous timeout and set a new one
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+          setIsTyping(false);
+          socket.emit('notTyping', user.username); 
+        }, 3000); 
     }
 
     useEffect(() => {
-        socket.on('typing', (username) => {
-            setTyping(username);
-        })
-    }, []) 
+        socket.on('currentlyTyping', (typingUsers) => {
+            setTyping(typingUsers);
+        });
+        return () => {
+            socket.off('currentlyTyping');
+        }
+    }, []);
+
+    useEffect(() => {
+        socket.on('clearTyping', () => {
+            // Clear the typing indicator from the UI
+            setTyping([]);
+        });
+        return () => {
+            socket.off('clearTyping');
+        }
+    }, []);
+
 
     // check login, redirect if not
     useEffect(() => {
@@ -94,7 +121,7 @@ export function Chat() {
 
     useEffect(() => {
         // scroll to bottom every time messages change
-        lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+        lastMessageRef.current?.scrollIntoView({ });
       }, [messages]);
 
     const messageList = messages?.map((msg) => (
@@ -105,8 +132,6 @@ export function Chat() {
           key={msg.id}
         />
       ));
-      
-
 
     return (
         <div class="chat-page">

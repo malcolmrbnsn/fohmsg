@@ -122,6 +122,11 @@ class Chatroom {
     }
   }
 
+  clearMessages() {
+    this.messages = [];
+  }
+
+
   getMessages() {
     return this.messages;
   }

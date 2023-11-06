@@ -16,6 +16,15 @@ const socketIO = require('socket.io')(http, {
 const Chatroom = require('./chatroom');
 const chatroom = new Chatroom();
 
+const usersTyping = new Set(); // Initialize an empty Set to track typing users
+// Check if nobody is typing after a certain period and emit a clear signal
+function clearTypingUsers() {
+  if (usersTyping.size === 0) {
+      socketIO.emit('clearTyping'); // Emit an event to clear the typing indicator on all clients
+  }
+}
+
+
 app.get("/help/users", (req, res, next) => {
   res.json([...chatroom.users.values()]);
 });
@@ -48,14 +57,26 @@ socketIO.on('connection', (socket) => {
   socket.on('message', message => {
     chatroom.addMessage(message);
     console.log(`CONN: message ${message.text} from ${message.userID}`);
-    socketIO.emit('push', chatroom.push());
+    if (message.text === "/clear") {
+      chatroom.clearMessages();
+    }
+      socketIO.emit('push', chatroom.push());
   });
 
-  socket.on('typing', data => {
-    // console.log(data);
-    // const {userID} = data;
-    socketIO.emit('typing', data);
-  })
+  socket.on('typing', (username) => {
+    usersTyping.add(username);
+    socketIO.emit('currentlyTyping', Array.from(usersTyping)); // Broadcast the updated list to all clients
+});
+
+// When a user stops typing, remove them from the usersTyping Set
+socket.on('notTyping', (username) => {
+  usersTyping.delete(username);
+  socketIO.emit('currentlyTyping', Array.from(usersTyping)); // Broadcast the updated list to all clients
+});
+
+// Set up an interval to periodically check and clear typing users
+const typingCheckInterval = setInterval(clearTypingUsers, 6000); // Check every 3 seconds
+
 
   socket.on('leaveChatroom', data => {
     const {userID} = data;
