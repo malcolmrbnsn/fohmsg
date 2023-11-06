@@ -1,5 +1,23 @@
 .chat-message {
-    width: 100%;
-    /* background-color: red; */
-    padding: 0 5px;
+    padding: 10px;
+    /* border-bottom: 1px solid #ccc; */
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    margin: 0;
+}
+
+.time {
+    font-size: 0.8em;
+    color: #777;
+    margin-left: 10px;
+}
+
+.message-content {
+    margin-top: 5px;
 }

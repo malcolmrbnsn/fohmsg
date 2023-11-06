@@ -2,7 +2,7 @@ import './ChatMessage.css';
 import format from 'date-fns/format';
 
 export function ChatMessage(props) {
-    const {username, text, time, key} = props
+    const { username, text, time, key } = props
 
     function formatTime(t) {
         return format(t, "p")
@@ -11,8 +11,11 @@ export function ChatMessage(props) {
 
     return (
         <div class="chat-message">
-                    <h3>{username} - {formatTime(time)}</h3>
-                    <p>{text}</p>
+            <div className="message-header">
+                <h3 class="username">{username}</h3>
+                <span className="time">{formatTime(time)}</span>
+            </div>
+            <p class="message-content">{text}</p>
         </div>
     )
 }

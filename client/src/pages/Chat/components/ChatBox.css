@@ -1,13 +1,10 @@
-.chat-footer {
+/* .chat-footer {
     flex: 0 1 40px;
     background-color: #121F2B;
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    /* background: rgba(0, 0, 0, 0.3); */
-    /* padding: 10px; */
-    /* position: relative; */
 }
 
 .chat-box {
@@ -16,8 +13,60 @@
     border: none;
     resize: none;
     color: #ffffffb3;
-    /* font-size: 11px; */
-    /* height: 17px; */
     margin: 0;
     padding: 0;
+} */
+
+.chat-footer {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    background-color: #121F2B;
+}
+
+/* .chat-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 8px;
+    margin-right: 5px;
+}
+
+.chat-send {
+    padding: 8px 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+} */
+
+.typing {
+    padding: 5px;
+    color: #888;
+    font-style: italic;
+    /* text-align: center; Center the typing indicator */
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+}
+.input-container input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    margin-right: 5px;
+}
+.input-container button {
+    padding: 8px 15px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
 }

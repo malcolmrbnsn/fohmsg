@@ -16,18 +16,18 @@ export function ChatBox({ sendMessage, sendTyping, typing }) {
     }
 
     return (
-        <div class="chat-footer">
-            <p>{typing}</p>
-            <form onSubmit={handleSubmit}>
+        <footer>
+            <div class="typing">Someone is typing...</div>
+        <form class="input-container" onSubmit={handleSubmit}>    
             <input
                 type="text"
-                class="chat-box"
                 placeholder="Type message..."
                 value={message}
                 onInput={handleInput}
             />
-            </form>
-        </div>
+            <button type="submit">Send</button>
+        </form>
+        </footer>
     );
 }
 
