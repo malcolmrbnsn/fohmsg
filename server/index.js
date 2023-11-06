@@ -52,7 +52,7 @@ socketIO.on('connection', (socket) => {
   });
 
   socket.on('typing', data => {
-    console.log(data);
+    // console.log(data);
     // const {userID} = data;
     socketIO.emit('typing', data);
   })

@@ -17,7 +17,7 @@ export function ChatBox({ sendMessage, sendTyping, typing }) {
 
     return (
         <footer>
-            <div class="typing">Someone is typing...</div>
+            <div class="typing">{typing}</div>
         <form class="input-container" onSubmit={handleSubmit}>    
             <input
                 type="text"

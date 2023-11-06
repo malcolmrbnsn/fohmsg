@@ -3,7 +3,7 @@
 
 group messages from user
 
-buttons at top right, disconnect, settings
+buttons at top right, disconnect, settings - just need interactivity
 
 flash messages
 highlight new messages
@@ -11,7 +11,5 @@ highlight new messages
 write messages, users at time instead of regularly
 
 dates show date if not current day
-
-header not fixed
 
 chrome + safari say disconnected???
