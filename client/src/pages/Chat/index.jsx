@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 import { ChatHeader } from './components/ChatHeader';
 import { ChatBox } from './components/ChatBox';
 import { ChatMessage } from './components/ChatMessage';
+import { SystemMessage } from './components/SystemMessage';
 
 import './style.css';
 import { Sidebar } from './components/Sidebar';
@@ -21,6 +22,7 @@ export function Chat() {
     const [isTyping, setIsTyping] = useState(false);
     const lastMessageRef = useRef(null);
     const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [effects, setEffects] = useState({});
 
     let typingTimeout = null;
 
@@ -31,9 +33,10 @@ export function Chat() {
             userID: user.userID,
             username: user.username,
             text,
-            time: Date.now()
+            time: Date.now(),
+            type: "message"
         }
-        socket.emit("message", message);
+        socket.emit("client-message", message);
     }
 
     function sendTyping() {
@@ -51,24 +54,45 @@ export function Chat() {
         }, 3000);
     }
 
+    // function sendEffects(newEffects) {
+    //     socket.emit('effects', newEffects);
+    // } 
+
     useEffect(() => {
         socket.on('currentlyTyping', (typingUsers) => {
             setTyping(typingUsers);
         });
-        return () => {
-            socket.off('currentlyTyping');
-        }
-    }, []);
-
-    useEffect(() => {
         socket.on('clearTyping', () => {
             // Clear the typing indicator from the UI
             setTyping([]);
         });
         return () => {
             socket.off('clearTyping');
+            socket.off('currentlyTyping');
         }
     }, []);
+
+    // useEffect(() => {
+    //     socket.on('effects', (newEffects) => {
+    //         setEffects(newEffects);
+    //     });
+
+    //     return () => {
+    //         socket.off('effects');
+    //     }
+    // }, []);
+
+    useEffect(() => {
+        socket.on("push", (data) => {
+            setUsers(data.users);
+            setMessages(data.messages);
+            // setEffects(data.effects);
+        })
+
+        return () => {
+            socket.off('push');
+        }
+    }, [])
 
     function joinChatroom() {
         const localUsername = localStorage.getItem("username");
@@ -84,26 +108,10 @@ export function Chat() {
             location.route("/");
         }
     }
-
-
-
     // check login, redirect if not
     useEffect(() => {
         joinChatroom();
     }, []);
-
-    useEffect(() => {
-        socket.on("push", (data) => {
-            const newUsers = data.users;
-            setUsers(newUsers);
-            const newMessages = data.messages;
-            setMessages(newMessages);
-        })
-
-        return () => {
-            socket.off('push');
-        }
-    }, [messages, users])
 
     // tracks connection state
     useEffect(() => {
@@ -130,17 +138,19 @@ export function Chat() {
     }, [messages]);
 
     const messageList = messages?.map((msg) => (
-        <ChatMessage
+        msg.type === "message" ? 
+            <ChatMessage
             username={msg.username}
             text={msg.text}
             time={msg.time}
-            key={msg.id}
-        />
+            key={msg.id} 
+        /> : <SystemMessage username={msg.username} text={msg.text} time={msg.time} key={msg.id}  />
+        
     ));
 
     return (
         <div class="chat-page">
-            <Sidebar visible={sidebarVisible} users={users}/>
+            <Sidebar visible={sidebarVisible} users={users} />
             <ChatHeader connected={connected} user={user} setSidebarVisible={setSidebarVisible} visible={sidebarVisible}/>
             <div className="chat-body">
                 {messageList}

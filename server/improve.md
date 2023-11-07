@@ -28,3 +28,17 @@ italic message, smaller font
 slash commands
 - clearance
 - alert
+
+
+flashing
+- send flashing state from client
+- rebroadcast
+- clients get the state
+- any client can set flashing
+
+
+remove userids, just use usernames :(
+whisper
+- /msg username
+- message type=whisper
+- not secret, but not visible to other users.

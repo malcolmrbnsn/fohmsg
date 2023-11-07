@@ -43,14 +43,6 @@
     cursor: pointer;
 }
 
-.user-list li:last-child {
-    border-bottom: none;
-}
-
-.user-list li:hover {
-    background-color: #e3e3e3;
-}
-
 .sidebar-buttons {
     display: flex;
     flex-direction: column;

@@ -54,11 +54,32 @@ socketIO.on('connection', (socket) => {
     socketIO.emit('push', chatroom.push());
   });
 
-  socket.on('message', message => {
-    chatroom.addMessage(message);
+  socket.on('client-message', message => {
     console.log(`CONN: message ${message.text} from ${message.userID}`);
     if (message.text === "/clear") {
       chatroom.clearMessages();
+      message.text = "cleared chat";
+      message.type = "system";
+      
+      chatroom.addMessage({
+        userID: -1,
+        text: `${message.username} has cleared the chat`,
+        type: "system",
+        time: Date.now()
+      });
+    } else if (message.text === "/sweepusers") {
+      chatroom.sweepUsers();
+      message.text = "cleared users";
+      message.type = "system";
+
+      chatroom.addMessage({
+        userID: -1,
+        text: `${message.username} has cleared offline users`,
+        type: "system",
+        time: Date.now()
+      });
+    } else {
+      chatroom.addMessage(message);
     }
       socketIO.emit('push', chatroom.push());
   });

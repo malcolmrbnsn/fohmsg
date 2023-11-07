@@ -108,25 +108,37 @@ class Chatroom {
       userID,
       username,
       text,
-      time
-  } = message
-    const user = this.getUserById(message.userID);
-    if (user) {
+      time,
+      type
+    } = message
+    const user = this.getUserById(userID);
+    if (user || userID === -1) {
       const newMessage = {
         username,
         text,
         time,
-        id: this.messages.length
+        id: this.messages.length,
+        type
       };
       this.messages.push(newMessage);
       this.writeMessages();
     } else {
       console.log("SENDMESSAGE: message received doesnt have a user");
     }
+
   }
 
   clearMessages() {
     this.messages = [];
+  }
+
+  sweepUsers() {
+    for (const [userId, user] of this.users) {
+      if (user.status === 0) {
+        this.users.delete(userId);
+      }
+    }
+    this.writeUsers();
   }
 
 
