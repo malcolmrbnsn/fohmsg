@@ -137,21 +137,44 @@ export function Chat() {
         lastMessageRef.current?.scrollIntoView({});
     }, [messages]);
 
-    const messageList = messages?.map((msg) => (
-        msg.type === "message" ? 
+    const messageList = messages?.reduce((acc, msg, index) => {
+        if (msg.type === "message") {
+            if (index === 0 || messages[index - 1].username !== msg.username) {
+                acc.push({
+                    username: msg.username,
+                    text: msg.text,
+                    time: msg.time,
+                    id: msg.id,
+                    type: msg.type
+                });
+            } else {
+                acc[acc.length - 1].text += `\n${msg.text}`;
+            }
+        } else {
+            acc.push({
+                type: msg.type, // Add this line
+                username: msg.username,
+                text: msg.text,
+                time: msg.time,
+                id: msg.id
+            });
+        }
+        return acc;
+    }, []).map((msg) => (
+        msg.type === "message" ?
             <ChatMessage
-            username={msg.username}
-            text={msg.text}
-            time={msg.time}
-            key={msg.id} 
-        /> : <SystemMessage username={msg.username} text={msg.text} time={msg.time} key={msg.id}  />
-        
+                username={msg.username}
+                text={msg.text}
+                time={msg.time}
+                key={msg.id}
+            /> : <SystemMessage username={msg.username} text={msg.text} time={msg.time} key={msg.id} />
+
     ));
 
     return (
         <div class="chat-page">
             <Sidebar visible={sidebarVisible} users={users} />
-            <ChatHeader connected={connected} user={user} setSidebarVisible={setSidebarVisible} visible={sidebarVisible}/>
+            <ChatHeader connected={connected} user={user} setSidebarVisible={setSidebarVisible} visible={sidebarVisible} />
             <div className="chat-body">
                 {messageList}
                 <div ref={lastMessageRef} />

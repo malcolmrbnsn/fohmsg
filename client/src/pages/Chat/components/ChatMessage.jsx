@@ -9,13 +9,15 @@ export function ChatMessage(props) {
         // return new Date(t).toLocaleTimeString;
     }
 
+    const splittedBody = text.split("\n").map((line) => (<p class="message-content">{line}</p>))
+
     return (
         <div class="chat-message">
             <div className="message-header">
                 <h3 class="username">{username}</h3>
                 <span className="time">{formatTime(time)}</span>
             </div>
-            <p class="message-content">{text}</p>
+            <div class="message-content">{splittedBody}</div>       
         </div>
     )
 }
