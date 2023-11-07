@@ -18,9 +18,11 @@ const chatroom = new Chatroom();
 
 const usersTyping = new Set(); // Initialize an empty Set to track typing users
 // Check if nobody is typing after a certain period and emit a clear signal
+let typingHasBeenCleared = true;
 function clearTypingUsers() {
-  if (usersTyping.size === 0) {
+  if (usersTyping.size === 0 && typingHasBeenCleared === false) {
       socketIO.emit('clearTyping'); // Emit an event to clear the typing indicator on all clients
+      typingHasBeenCleared = true;
   }
 }
 
@@ -86,6 +88,7 @@ socketIO.on('connection', (socket) => {
 
   socket.on('typing', (username) => {
     usersTyping.add(username);
+    typingHasBeenCleared = false;
     socketIO.emit('currentlyTyping', Array.from(usersTyping)); // Broadcast the updated list to all clients
 });
 

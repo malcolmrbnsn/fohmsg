@@ -150,7 +150,6 @@ class Chatroom {
   }
 
   push() {
-
     const messages = this.getMessages() || [];
     const users = this.getUsers() || [];
 
